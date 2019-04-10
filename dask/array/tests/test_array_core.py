@@ -3536,7 +3536,9 @@ def test_zarr_nocompute():
         assert_eq(a, a2)
         assert a2.chunks == a.chunks
 
-
+@pytest.mark.skipif(sys.version_info[0:2] == (3,5),
+                    reason="Skipping TileDB with python 3.5 because the tiledb-py "
+                           "conda-forge package is too old, and is not updatable.")
 def test_tiledb_roundtrip():
     tiledb = pytest.importorskip('tiledb')
     # 1) load with default chunking
@@ -3570,6 +3572,9 @@ def test_tiledb_roundtrip():
         assert a.chunks == tdb.chunks
 
 
+@pytest.mark.skipif(sys.version_info[0:2] == (3,5),
+                    reason="Skipping TileDB with python 3.5 because the tiledb-py "
+                           "conda-forge package is too old, and is not updatable.")
 def test_tiledb_multiattr():
     tiledb = pytest.importorskip('tiledb')
     dom = tiledb.Domain(
