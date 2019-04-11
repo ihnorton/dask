@@ -1,4 +1,4 @@
-import dask.array as da
+from . import core
 
 
 def _tiledb_to_chunks(tiledb_array):
@@ -50,6 +50,7 @@ def from_tiledb(uri, attribute=None, chunks=None,
     (3, 3)
     >> tdb_ar.mean().compute()
     4.0
+
     """
     import tiledb
     tiledb_config = storage_options or dict()
@@ -77,7 +78,7 @@ def from_tiledb(uri, attribute=None, chunks=None,
 
     assert(len(chunks) == tdb.schema.ndim)
 
-    return da.from_array(tdb, chunks, name='tiledb-%s' % uri)
+    return core.from_array(tdb, chunks, name='tiledb-%s' % uri)
 
 
 def to_tiledb(darray, uri, compute=True, return_stored=False,
@@ -119,7 +120,7 @@ def to_tiledb(darray, uri, compute=True, return_stored=False,
     # encryption key, if any
     key = tiledb_config.pop('key', None)
 
-    if not da.core._check_regular_chunks(darray.chunks):
+    if not core._check_regular_chunks(darray.chunks):
         raise ValueError('Attempt to save array to TileDB with irregular '
                          'chunking, please call `arr.rechunk(...)` first.')
 

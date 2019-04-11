@@ -48,8 +48,6 @@ from .numpy_compat import _Recurser, _make_sliced_dtype
 from .slicing import slice_array, replace_ellipsis
 from .blockwise import blockwise
 
-from .tiledb_io import from_tiledb, to_tiledb
-
 config.update_defaults({'array': {
     'chunk-size': '128MiB',
     'rechunk-threshold': 4
@@ -1787,6 +1785,7 @@ class Array(DaskMethodsMixin):
 
         See https://docs.tiledb.io for details about the format and engine.
         """
+        from .tiledb_io import to_tiledb
         return to_tiledb(self, uri, *args, **kwargs)
 
 
@@ -2257,7 +2256,6 @@ def to_zarr(arr, url, component=None, storage_options=None,
                     store=mapper, path=component, overwrite=overwrite, **kwargs)
     return arr.store(z, lock=False, compute=compute,
                      return_stored=return_stored)
-
 
 
 def _check_regular_chunks(chunkset):
